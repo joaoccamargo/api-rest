@@ -28,33 +28,23 @@ app.post("/game", (request, response) => {
             year,
             price
         }).then( ()=> {
-            response.json({
-                msg: "Criado com sucesso"
-            })
+            response.sendStatus(201);
         })
-        response.status = 200
+        
+        
     }
 })
 
 app.put("/game/:id", (request, response) => {
     let id = request.params.id;
-    let {title, year, price} = request.body;
+    let { title, year, price } = request.body;
 
-    if(isNaN(id)){
-        response.json({
-            msg: "Defina um ID correto!"
-        })
-        response.status = 400
-    }
-
-    Game.update({title: title, year:year, price:price}, {
-        where: {id:id}
-    }).then(() => {
-        response.json({
-            msg: "Game Modificado!"
-        })
-    })
-    response.status = 200;
+    Game.update(
+        { title: title, year: year, price: price },
+        { where: { id: id } }
+        ).then(() => {
+         response.sendStatus(200)
+        });
 })
 
 app.delete("/game/:id", (request, response) => {
@@ -64,11 +54,10 @@ app.delete("/game/:id", (request, response) => {
         Game.destroy({
             where: {id: id}
         }).then(() => {
-            response.json({
-                msg: "OK DELETE"});
+           response.sendStatus(200);
+        }).catch(error => {
+            response.sendStatus(404);
         })
-    }else{
-        response.redirect("/games")
     }
 })
 
